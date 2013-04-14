@@ -1,5 +1,7 @@
 CWD=$(shell pwd)
-RUSTC = $(CWD)/dep/bin/rustc
+RUSTC = $(CWD)/bin/rust/bin/rustc
 
-all: src/main.rs
-	@echo $(RUSTC) $(.ALLSRC) -o $(.TARGET)
+SOURCES = src/main.rs
+
+all: $(SOURCES)
+	$(RUSTC) $(SOURCES) -o guava
