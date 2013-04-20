@@ -1,0 +1,8 @@
+/bin/
+/dep/
+*.dSYM
+/guava
+*~
+.#*
+\#*#
+.DS_Store
