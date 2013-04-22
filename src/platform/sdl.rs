@@ -44,33 +44,52 @@ extern mod SDL {
   fn SDL_Delay(ms: u32);
 }
 
-pub fn sdlMain() {
-  unsafe {
-    if(SDL::SDL_Init(SDL_INIT_VIDEO) != 0) {
-      io::println("Error Initializing SDL.");
+pub struct Platform {
+  window: *SDL_Window,
+  context: *SDL_GLContext
+}
+
+impl Platform {
+  pub fn new() -> Platform {
+    unsafe {
+      if(SDL::SDL_Init(SDL_INIT_VIDEO) != 0) {
+        io::println("Error Initializing SDL.");
+      }
+
+      // SDL::SDL_GL_SetAtctribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+      // SDL::SDL_GL_SetAttribute(SDL_GL_CONTEXT_MMINOR_VERSION, 2);
+
+      // SDL::SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+      // SDL::SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 32);
+
+
+      let window = do str::as_c_str("Project Guava") |cstr| {
+        SDL::SDL_CreateWindow(cstr,
+                              SDL_WINDOWPOS_CENTERED,
+                              SDL_WINDOWPOS_CENTERED,
+                              1024, 768,
+                              (SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN))
+      };
+
+      let context = SDL::SDL_GL_CreateContext(window);
+
+      Platform{window: window, context: context}
     }
+  }
+}
 
-    // SDL::SDL_GL_SetAtctribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-    // SDL::SDL_GL_SetAttribute(SDL_GL_CONTEXT_MMINOR_VERSION, 2);
+impl Drop for Platform {
+  fn finalize(&self) {
+    unsafe {
+      SDL::SDL_GL_DeleteContext(self.context);
+      SDL::SDL_DestroyWindow(self.window);
+      SDL::SDL_Quit();
+    }
+  }
+}
 
-    // SDL::SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-    // SDL::SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 32);
-
-
-    let window = do str::as_c_str("Project Guava") |cstr| {
-      SDL::SDL_CreateWindow(cstr,
-                            SDL_WINDOWPOS_CENTERED,
-                            SDL_WINDOWPOS_CENTERED,
-                            1024, 768,
-                            (SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN))
-    };
-
-    let context = SDL::SDL_GL_CreateContext(window);
-
-    SDL::SDL_Delay(2000);
-
-    SDL::SDL_GL_DeleteContext(context);
-    SDL::SDL_DestroyWindow(window);
-    SDL::SDL_Quit();
+pub fn delay(ms: u32) {
+  unsafe {
+    SDL::SDL_Delay(ms);
   }
 }
