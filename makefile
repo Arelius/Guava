@@ -1,5 +1,5 @@
 CWD=$(shell pwd)
-RUSTC = $(CWD)/bin/rust/bin/rustc
+RUSTC = $(CWD)/dep/bin/rustc
 
 SOURCES = src/main.rs
 
