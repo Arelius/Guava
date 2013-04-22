@@ -1,10 +1,12 @@
-CWD=$(shell pwd)
-RUSTC = $(CWD)/dep/bin/rustc
+CWD = $(shell pwd)
+DEP = $(CWD)/dep
+RUSTC = $(DEP)/bin/rustc
+LIBS = -L $(DEP)/SDL/lib
 
 SOURCES = src/main.rs
 
 all: $(SOURCES)
-	$(RUSTC) $(SOURCES) -o guava
+	$(RUSTC) $(LIBS) $(SOURCES) -o guava
 
 run: all
 	$(CWD)/guava

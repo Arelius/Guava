@@ -1,3 +1,7 @@
+mod platform {
+  mod sdl;
+}
+
 fn main() {
-    io::println("hai");
+    platform::sdl::sdlMain();
 }

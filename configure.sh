@@ -20,7 +20,7 @@ cd ..
 hg clone http://hg.libsdl.org/SDL/
 mkdir SDL-Build
 cd SDL-Build
-../SDL/configure --prefix=$INSTDIR
+../SDL/configure --prefix=$INSTDIR/SDL
 make
 make install
 
