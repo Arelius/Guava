@@ -21,6 +21,31 @@ static SDL_WINDOW_FOREIGN:u32 = 0x0000080;
 type SDL_Window = libc::c_void;
 type SDL_GLContext = libc::c_void;
 
+// SDL_GLattr
+static SDL_GL_RED_SIZE:u32 = 0;
+static SDL_GL_GREEN_SIZE:u32 = 1;
+static SDL_GL_BLUE_SIZE:u32 = 2;
+static SDL_GL_ALPHA_SIZE:u32 = 3;
+static SDL_GL_BUFFER_SIZE:u32 = 4;
+static SDL_GL_DOUBLEBUFFER:u32 = 5;
+static SDL_GL_DEPTH_SIZE:u32 = 6;
+static SDL_GL_STENCIL_SIZE:u32 = 7;
+static SDL_GL_ACCUM_RED_SIZE:u32 = 8;
+static SDL_GL_ACCUM_GREEN_SIZE:u32 = 9;
+static SDL_GL_ACCUM_BLUE_SIZE:u32 = 10;
+static SDL_GL_ACCUM_ALPHA_SIZE:u32 = 11;
+static SDL_GL_STEREO:u32 = 12;
+static SDL_GL_MULTISAMPLEBUFFERS:u32 = 13;
+static SDL_GL_MULTISAMPLESAMPLES:u32 = 14;
+static SDL_GL_ACCELERATED_VISUAL:u32 = 15;
+static SDL_GL_RETAINED_BACKING:u32 = 16;
+static SDL_GL_CONTEXT_MAJOR_VERSION:u32 = 17;
+static SDL_GL_CONTEXT_MINOR_VERSION:u32 = 18;
+static SDL_GL_CONTEXT_EGL:u32 = 19;
+static SDL_GL_CONTEXT_FLAGS:u32 = 20;
+static SDL_GL_CONTEXT_PROFILE_MASK:u32 = 21;
+static SDL_GL_SHARE_WITH_CURRENT_CONTEX:u32 = 22;
+
 #[link_name = "SDL2"]
 extern mod SDL {
   // SDL.h
@@ -38,6 +63,7 @@ extern mod SDL {
   fn SDL_GL_CreateContext(window: *SDL_Window) -> *SDL_GLContext;
   fn SDL_GL_DeleteContext(context: *SDL_GLContext);
 
+  fn SDL_GL_SetAttribute(attr: libc::c_uint, value: libc::c_int) -> libc::c_int;
 
   // SDL_timer.h
 
@@ -56,11 +82,11 @@ impl Platform {
         io::println("Error Initializing SDL.");
       }
 
-      // SDL::SDL_GL_SetAtctribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-      // SDL::SDL_GL_SetAttribute(SDL_GL_CONTEXT_MMINOR_VERSION, 2);
+      SDL::SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+      SDL::SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
 
-      // SDL::SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-      // SDL::SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 32);
+      SDL::SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+      SDL::SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 32);
 
 
       let window = do str::as_c_str("Project Guava") |cstr| {
