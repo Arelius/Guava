@@ -1,6 +1,48 @@
 // SDL.h
 static SDL_INIT_VIDEO:u32 = 0x00000020;
 
+// SDL_events.h
+
+static SDL_QUIT:u32 = 0x100;
+
+struct SDL_QuitEvent {
+  evType: u32,
+  timestamp: u32,
+  padding1: i32,
+  padding2: i32,
+  padding3: i32,
+  padding4: i32,
+  padding5: i32,
+  padding6: i32,
+  padding7: i32,
+  padding8: i32,
+  padding9: i32,
+  padding10: i32,
+  padding11: i32,
+  padding12: i32
+}
+
+type SDL_Event = SDL_QuitEvent;
+
+fn mkEvent() -> SDL_QuitEvent {
+  SDL_QuitEvent {
+    evType: 0,
+    timestamp: 0,
+    padding1: 0,
+    padding2: 0,
+    padding3: 0,
+    padding4: 0,
+    padding5: 0,
+    padding6: 0,
+    padding7: 0,
+    padding8: 0,
+    padding9: 0,
+    padding10: 0,
+    padding11: 0,
+    padding12: 0
+  }
+}
+
 // SDL_video.h
 static SDL_WINDOWPOS_CENTERED:i32 = 0x2FFF0000;
 
@@ -52,6 +94,11 @@ extern mod SDL {
   fn SDL_Init(flags: libc::c_uint) -> libc::c_int;
   fn SDL_Quit();
 
+  // SDL_events.h
+  fn SDL_PollEvent(event: *SDL_Event) -> libc::c_int;
+
+  fn SDL_PumpEvents();
+
   // SDL_video.h
   fn SDL_CreateWindow(title: *libc::c_char,
                       x: i32, y: i32,
@@ -64,6 +111,8 @@ extern mod SDL {
   fn SDL_GL_DeleteContext(context: *SDL_GLContext);
 
   fn SDL_GL_SetAttribute(attr: libc::c_uint, value: libc::c_int) -> libc::c_int;
+
+  fn SDL_GL_SwapWindow(window: *SDL_Window);
 
   // SDL_timer.h
 
@@ -100,6 +149,26 @@ impl Platform {
       let context = SDL::SDL_GL_CreateContext(window);
 
       Platform{window: window, context: context}
+    }
+  }
+
+  pub fn continue(&self) -> bool {
+    unsafe {
+      let mut event = mkEvent();
+      while(SDL::SDL_PollEvent(&event) != 0)
+      {
+        if(event.evType == SDL_QUIT)
+        {
+          return false;
+        }
+      }
+      return true;
+    }
+  }
+
+  pub fn finishFrame(&self) {
+    unsafe {
+      SDL::SDL_GL_SwapWindow(self.window);
     }
   }
 }
