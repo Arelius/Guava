@@ -9,4 +9,7 @@ all: $(SOURCES)
 	$(RUSTC) $(LIBS) $(SOURCES) -o guava
 
 run: all
-	$(CWD)/guava
+	$(CWD)/run.sh
+
+stop:
+	$(CWD)/stop.sh
