@@ -1,7 +1,7 @@
 CWD = $(shell pwd)
 DEP = $(CWD)/dep
 RUSTC = $(DEP)/bin/rustc
-LIBS = -L $(DEP)/SDL/lib
+LIBS = -L $(DEP)/SDL/lib -L $(DEP)/rust-opengles
 
 SOURCES = src/main.rs
 

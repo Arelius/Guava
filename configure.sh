@@ -26,3 +26,13 @@ make install
 
 cd ..
 
+cd dep
+
+# Install rust-opengles
+git clone git://github.com/mozilla-servo/rust-opengles.git
+cd rust-opengles
+sh ./configure
+PATH=$INSTDIR/bin:$PATH; make
+cd ..
+
+cd ..
