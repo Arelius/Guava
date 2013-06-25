@@ -1,3 +1,5 @@
+use gldevice;
+#[path="./gldevice.rs"]
 mod gldevice;
 
 pub struct Render {
